@@ -194,6 +194,7 @@ vim.keymap.set('i', '<C-p>', '<Esc>', { noremap = true })
 vim.keymap.set('n', '<C-s>', ':split<Cr>', { desc = 'Split horizontally' })
 vim.keymap.set('n', '<C-v>', ':vsplit<Cr>', { desc = 'Split vertically' })
 vim.keymap.set('n', '<C-]>', ':term<Cr>', { desc = 'Open terminal' })
+vim.g.minisurround_disable = true
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -261,6 +262,25 @@ require('lazy').setup({
     },
   },
 
+  -- nvim surround replacement for mini.surround
+  -- see `:h nvim-surround.usage` for help
+  -- surr*ound_words             ysiw)           (surround_words)
+  -- *make strings               ys$"            "make strings"
+  -- [delete ar*ound me!]        ds]             delete around me!
+  -- remove <b>HTML t*ags</b>    dst             remove HTML tags
+  -- 'change quot*es'            cs'"            "change quotes"
+  -- <b>or tag* types</b>        csth1<CR>       <h1>or tag types</h1>
+  -- delete(functi*on calls)     dsf             function calls
+  {
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup {
+        -- Configuration here, or leave empty to use defaults
+      }
+    end,
+  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -721,7 +741,11 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        makrdown = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -976,3 +1000,29 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+require('lspconfig').emmet_languange_server.setup {
+  filetypes = { 'css', 'eruby', 'html', 'javascript', 'javascriptreact', 'less', 'sass', 'scss', 'pug', 'typescriptreact' },
+  -- Read more about this options in the [vscode docs](https://code.visualstudio.com/docs/editor/emmet#_emmet-configuration).
+  -- **Note:** only the options listed in the table are supported.
+  init_options = {
+    ---@type table<string, string>
+    includeLanguages = {},
+    --- @type string[]
+    excludeLanguages = {},
+    --- @type string[]
+    extensionsPath = {},
+    --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/preferences/)
+    preferences = {},
+    --- @type boolean Defaults to `true`
+    showAbbreviationSuggestions = true,
+    --- @type "always" | "never" Defaults to `"always"`
+    showExpandedAbbreviation = 'always',
+    --- @type boolean Defaults to `false`
+    showSuggestionsAsSnippets = false,
+    --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/syntax-profiles/)
+    syntaxProfiles = {},
+    --- @type table<string, string> [Emmet Docs](https://docs.emmet.io/customization/snippets/#variables)
+    variables = {},
+  },
+}
