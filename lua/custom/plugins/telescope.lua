@@ -57,6 +57,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         file_ignore_patterns = {
           'venv',
           'node_modules',
+          '%.bru',
         },
       },
       -- pickers = {}
